@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f2eb"><title>紙上小日子 · 數獨、踩地雷、Zip 與 Patches</title>
+<style>
+:root{--paper:#f5f2eb;--ink:#293b34;--green:#35634d;--muted:#7c8378;--line:#d9dacf;--soft:#e5ecdf;--white:#fefdf8;--red:#ad5143}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;-webkit-tap-highlight-color:transparent}button,select{font:inherit;color:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.38;cursor:default}button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #c28b46;outline-offset:3px}.app{max-width:460px;margin:auto;padding:22px 20px max(20px,env(safe-area-inset-bottom))}.mast{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.brand{font-family:Georgia,serif;font-size:21px;letter-spacing:2px;font-weight:600}.brand small{display:block;font-family:inherit;font-size:9px;font-weight:400;letter-spacing:3px;color:var(--muted);margin-top:5px}.edition{font-size:10px;letter-spacing:1px;color:var(--muted);border-left:1px solid var(--line);padding-left:12px;line-height:1.7}.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:4px;background:#eae7de;border-radius:12px;gap:4px;margin-bottom:22px}.tab{padding-inline:3px!important;border:0;background:none;border-radius:9px;padding:11px;font-weight:600;font-size:14px;color:#737a70}.tab[aria-selected=true]{background:var(--white);color:var(--green);box-shadow:0 2px 5px #293b340a}.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}h1{font-size:28px;letter-spacing:3px;font-weight:600;margin:0}.serial{font-size:10px;color:var(--muted);letter-spacing:2px}.subtitle{font-size:12px;color:var(--muted);margin:0 0 20px;letter-spacing:1px}.bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;gap:8px}.select-wrap{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:12px}select{border:1px solid var(--line);border-radius:7px;background:var(--white);padding:7px 24px 7px 9px;font-size:12px}.time{font-size:13px;font-variant-numeric:tabular-nums;letter-spacing:1px}.board-wrap{position:relative}.board{display:grid;width:100%;aspect-ratio:1;border:2px solid #6e7a6a;background:var(--white);overflow:hidden;border-radius:3px;user-select:none;-webkit-user-select:none}.sudoku{grid-template-columns:repeat(9,1fr)}.cell{border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:0;background:var(--white);font-size:clamp(18px,5.5vw,26px);font-weight:500;display:flex;align-items:center;justify-content:center;position:relative;min-width:0;min-height:0;aspect-ratio:1;border-radius:0}.sudoku .cell:nth-child(3n){border-right:1.5px solid #87917e}.sudoku .cell:nth-child(9n){border-right:0}.sudoku .cell:nth-child(n+19):nth-child(-n+27),.sudoku .cell:nth-child(n+46):nth-child(-n+54){border-bottom:1.5px solid #87917e}.sudoku .cell:nth-child(n+73){border-bottom:0}.cell.peer{background:#f0f2e9}.cell.same{background:#dfe9d9}.cell.selected{background:#d0e1cc;box-shadow:inset 0 0 0 2px var(--green)}.cell.entered{color:#3e725b}.cell.conflict{color:var(--red);background:#f6e4dc}.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));width:100%;height:100%;padding:0;font-size:clamp(11px,3vw,12px);line-height:1;font-weight:600;color:#41563e}.notes span{display:flex;align-items:center;justify-content:center}.status{min-height:35px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);gap:8px}.status span:last-child{white-space:nowrap}.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:4px 0 12px}.tool{border:1px solid var(--line);background:transparent;border-radius:9px;padding:10px 4px;font-size:12px;min-height:44px}.tool.active{background:var(--soft);border-color:var(--green);color:var(--green)}.tool b{font-size:17px;display:block;font-weight:400;margin-bottom:2px}.keypad{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}.key{padding:10px 0;border:1px solid #d7ddce;border-radius:7px;background:#edf0e5;color:var(--green);font-size:21px;min-height:48px}.key small{display:block;font-size:8px;color:var(--muted);height:10px;margin-top:3px}.new{width:100%;background:var(--green);color:#fffdf5;border:0;border-radius:9px;padding:13px;margin-top:17px;font-size:13px;letter-spacing:2px;min-height:44px}.new:hover{background:#294f3d}details{margin-top:19px;border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:12px;line-height:1.9}summary{cursor:pointer;color:#596756;min-height:25px}details p{margin:8px 0}footer{text-align:center;font-size:10px;color:#929487;letter-spacing:2px;margin-top:23px}.mine{gap:2px;padding:3px;background:#d9ddce;border-color:#89917d}.mine .cell{border:0;border-radius:2px;font-size:clamp(15px,4.7vw,21px);font-weight:650;background:#e9ebde;box-shadow:inset 0 2px 0 #fafaf0,inset 0 -2px 0 #c7ceba}.mine .cell.revealed{background:#f8f7ef;box-shadow:none}.mine .cell.flag{color:#a56d27}.mine .cell.exploded{background:#edc3b5;color:#953c2b;box-shadow:none}.mine .cell[data-n="1"]{color:#4d7a91}.mine .cell[data-n="2"]{color:#47754d}.mine .cell[data-n="3"]{color:#b46d48}.mine .cell[data-n="4"]{color:#806598}.mine .cell[data-n="5"],.mine .cell[data-n="6"],.mine .cell[data-n="7"],.mine .cell[data-n="8"]{color:#a94c45}.mine-mode{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 0}.mine-mode .tool{padding:13px;font-size:14px}.mine-info{display:flex;justify-content:space-between;background:#eceee3;padding:12px 14px;border-radius:8px;margin-top:13px;font-size:12px}.overlay{position:absolute;inset:0;background:#f5f2ebeb;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;line-height:2;z-index:2}.spinner{width:22px;height:22px;border:2px solid var(--line);border-top-color:var(--green);border-radius:50%;margin:0 auto 12px;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}[hidden]{display:none!important}dialog{border:1px solid var(--line);border-radius:15px;background:var(--white);color:var(--ink);max-width:340px;width:calc(100% - 40px);padding:25px}dialog::backdrop{background:#25382c66}dialog h2{font-size:23px;margin:0 0 12px}dialog p{font-size:14px;line-height:1.8;color:#6f786c}.dialog-actions{display:flex;gap:10px;margin-top:20px}.dialog-actions button{flex:1;border:1px solid var(--line);border-radius:8px;padding:12px;background:transparent}.dialog-actions .primary{background:var(--green);color:white;border-color:var(--green)}@media(max-width:360px){.app{padding:15px 13px}.mast{margin-bottom:16px}.tabs{margin-bottom:16px}.subtitle{margin-bottom:14px}.key{font-size:19px}.tool{padding:7px 3px}.new{margin-top:12px}}@media(max-height:760px){.app{padding-top:10px}.mast{margin-bottom:8px}.brand{font-size:18px;line-height:22px}.brand small{font-size:8px;line-height:10px;margin-top:2px}.edition{font-size:9px}.tabs{margin-bottom:10px}.tab{padding:5px;line-height:20px}.heading{margin-bottom:4px}.heading h1{font-size:24px;line-height:28px}.subtitle{line-height:16px;margin:0 0 10px}.bar{margin-bottom:8px}select{padding-block:5px;line-height:18px}.board{max-width:calc(100dvh - 380px);margin-inline:auto}.status{min-height:26px;font-size:10px}.tools{margin:2px 0 7px}.tool{min-height:40px;padding:4px 3px;line-height:16px}.tool b{font-size:14px;line-height:16px;margin-bottom:0}.key{min-height:42px;padding:4px 0;line-height:22px}.key small{line-height:10px;margin-top:1px}.new{margin-top:8px;padding:11px;line-height:20px}details{margin-top:14px}footer{margin-top:14px}}@media(prefers-reduced-motion:reduce){.spinner{animation:none}}
+/* Zip shares the paper palette; its route remains clear above the cell grid. */
+.zip-wrap{position:relative}.zip-surface{position:relative;width:100%;aspect-ratio:1;margin-inline:auto}
+.zip-board{height:100%;max-width:none!important;touch-action:none;overscroll-behavior:contain;grid-template-columns:repeat(var(--zip-size,5),minmax(0,1fr));grid-template-rows:repeat(var(--zip-size,5),minmax(0,1fr))}
+.zip-cell{border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:0;background:transparent;position:relative;min-width:0;min-height:0;display:flex;justify-content:center;align-items:center;border-radius:0;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;outline-offset:-4px}
+.zip-cell.visited{background:#e6edde}.zip-cell.head{background:#d4e3cc}.zip-cell:disabled{opacity:1;cursor:default}
+.zip-marker{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;width:clamp(23px,7vw,30px);height:clamp(23px,7vw,30px);border-radius:50%;background:var(--ink);color:var(--white);font-size:clamp(13px,4vw,17px);font-weight:650;line-height:1;box-shadow:0 0 0 3px var(--white);pointer-events:none}
+.zip-cell.visited .zip-marker{background:var(--green);box-shadow:0 0 0 3px #e6edde}.zip-cell.head .zip-marker{box-shadow:0 0 0 3px #d4e3cc}.zip-cell.next .zip-marker{outline:2px solid #9b7c43;outline-offset:3px}
+.zip-cell.finish .zip-marker{border-radius:7px}.zip-head{position:relative;z-index:2;width:13px;height:13px;background:var(--green);border-radius:50%;box-shadow:0 0 0 4px #d4e3cc;pointer-events:none}
+.zip-lines{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);z-index:1;pointer-events:none;overflow:visible}
+.zip-lines polyline{fill:none;stroke:var(--green);stroke-width:14;stroke-linecap:round;stroke-linejoin:round}
+.zip-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:4px 0 12px}.zip-guide{display:flex;justify-content:space-between;gap:6px;color:var(--muted);font-size:11px;margin-top:10px}
+@media(max-height:760px){.zip-surface{max-width:calc(100dvh - 295px)}.zip-tools{margin:2px 0 8px}.zip-guide{margin-top:8px;font-size:10px}.zip-marker{width:23px;height:23px;font-size:13px}}
+
+.zip-cell.hint-next{background:#dcebd6;box-shadow:inset 0 0 0 3px var(--green)}
+.zip-cell.hint-rethink{background:#f5e4cc;box-shadow:inset 0 0 0 3px #a66b32}
+.zip-cell.hint-rethink::after{content:'?';position:absolute;right:3px;bottom:3px;z-index:3;display:flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:#875323;color:#fffdf5;font-size:12px;font-weight:600;line-height:1;pointer-events:none}
+
+.patch-wrap{position:relative}.patch-surface{position:relative;width:100%;aspect-ratio:1;margin-inline:auto}
+.patch-board{height:100%;max-width:none!important;touch-action:none;overscroll-behavior:contain;grid-template-columns:repeat(var(--patch-size,5),minmax(0,1fr));grid-template-rows:repeat(var(--patch-size,5),minmax(0,1fr))}
+.patch-cell{border:0;border-right:1px dashed #c4c9bc;border-bottom:1px dashed #c4c9bc;padding:0;background:transparent;position:relative;min-width:0;min-height:0;display:flex;justify-content:center;align-items:center;border-radius:0;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;outline-offset:-4px}
+.patch-cell:disabled{opacity:1;cursor:default}.patch-cell.corner{box-shadow:inset 0 0 0 3px var(--green);background:#edf2e7}
+.patch-badge{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:5px;background:var(--patch-color);color:#fffdf5;font-size:17px;font-weight:650;line-height:1;pointer-events:none}
+.patch-badge.tall{width:24px;height:34px}.patch-badge.wide{width:35px;height:24px}.patch-badge.any{width:28px;height:28px}
+.patch-badge.any::before,.patch-badge.any::after{content:'';position:absolute;z-index:-1;background:var(--patch-color);opacity:.55;border:1px dashed var(--patch-color);border-radius:5px;box-sizing:border-box}
+.patch-badge.any::before{width:36px;height:21px}.patch-badge.any::after{width:21px;height:36px}.patch-badge span{position:relative;z-index:1}
+.patch-regions{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);z-index:1;pointer-events:none;overflow:visible}
+.patch-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:4px 0 0}.patch-status span:first-child{min-width:0;line-height:1.5}
+.play-guide{margin-top:20px;border:1px solid var(--line);border-radius:10px;padding:16px;color:#596756;font-size:13px;line-height:1.7}
+.play-guide p{margin:10px 0 0}.play-guide .play-guide-title{margin:0 0 14px;color:var(--ink);font-size:14px;font-weight:600}
+
+.patch-icon{display:inline-block;flex:none;position:relative;background:#aeb6a5;border:1.5px solid #596756;border-radius:2px;width:20px;height:20px;margin-inline:3px}
+.patch-icon.tall{width:16px;height:26px;margin-inline:5px}.patch-icon.wide{width:26px;height:16px;margin-inline:0}.patch-icon.any::before,.patch-icon.any::after{content:'';position:absolute;background:#aeb6a580;border:1px dashed #596756;border-radius:2px}
+.patch-icon.any::before{width:26px;height:12px;left:-5px;top:2px}.patch-icon.any::after{width:12px;height:26px;left:2px;top:-5px}
+@media(max-height:760px){.patch-surface{max-width:calc(100dvh - 280px)}.patch-tools{margin-top:2px}.play-guide{margin-top:16px}.patch-badge{font-size:16px;width:26px;height:26px}.patch-badge.tall{height:31px;width:22px}.patch-badge.wide{width:31px;height:22px}.patch-badge.any{width:25px;height:25px}.patch-badge.any::before{width:33px;height:19px}.patch-badge.any::after{width:19px;height:33px}}
+
+
+.play-legend{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px}
+.play-legend>span{display:flex;align-items:center;gap:12px;min-height:30px;line-height:1.5}
+.play-legend svg{display:block;flex:none;width:26px;height:26px;color:#596756;overflow:visible}
+
+/* Shared reading scale. Short screens scroll rather than shrinking the board. */
+:root{--muted:#657061}
+body{font-size:16px;-webkit-text-size-adjust:100%}
+.app{padding:18px 16px max(24px,env(safe-area-inset-bottom))}
+.mast{gap:10px;align-items:center;margin-bottom:12px}
+.brand{font-size:24px;line-height:1.25;letter-spacing:2px;min-width:0}
+.brand small{font-size:12px;line-height:1.5;letter-spacing:1px;margin-top:4px}
+.edition{font-size:12px;line-height:1.6;letter-spacing:0;padding-left:10px;flex:none}
+.tabs{margin-bottom:14px;gap:4px}
+.tab{font-size:16px;line-height:1.5;min-height:44px;padding-block:9px}
+.heading{gap:10px;margin-bottom:4px}.heading h1{font-size:30px;line-height:1.25;letter-spacing:2px}
+.serial{font-size:12px;line-height:1.5;letter-spacing:1px;flex:none}
+.subtitle{font-size:16px;line-height:1.6;letter-spacing:.4px;margin:0 0 12px}
+.bar{gap:8px;row-gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.select-wrap{font-size:15px;gap:6px;min-width:0;max-width:100%}
+select{font-size:16px;line-height:1.5;min-height:44px;padding:8px 24px 8px 10px;max-width:100%;min-width:0}
+.time{font-size:16px;line-height:1.5;letter-spacing:.3px;white-space:nowrap;margin-left:auto}
+.board{max-width:none;margin-inline:auto}.zip-surface,.patch-surface{max-width:none}
+.sudoku .cell{font-size:clamp(22px,6.5vw,29px);font-weight:550}
+.notes{font-size:clamp(12px,3.7vw,14px);font-weight:650;color:#354d33;line-height:1}
+.status,.patch-status{font-size:14px;line-height:1.6;min-height:44px;padding-block:8px;gap:10px;align-items:flex-start}
+.status span:first-child{min-width:0}.status span:last-child{flex:none}
+.tools,.zip-tools{margin:4px 0 8px;gap:8px}.patch-tools{margin:4px 0 0;gap:8px}
+.tool{font-size:15px;line-height:1.5;min-height:56px;padding:8px 1px}
+.tool b{font-size:20px;line-height:1.1;margin-bottom:3px}
+.keypad{gap:3px}.key{font-size:26px;line-height:28px;min-height:66px;padding:8px 0}
+.key small{font-size:12px;line-height:18px;height:18px;margin-top:4px}
+.new{font-size:16px;line-height:1.5;letter-spacing:1px;min-height:50px;padding:13px 10px;margin-top:12px}
+.mine .cell{font-size:clamp(19px,5.8vw,26px)}
+.mine-mode{margin-top:8px;gap:8px}.mine-mode .tool{font-size:16px;min-height:50px;padding:12px 6px}
+.mine-info{font-size:15px;line-height:1.6;gap:8px;flex-wrap:wrap;margin-top:12px;padding:12px}
+.zip-marker{width:clamp(28px,8vw,36px);height:clamp(28px,8vw,36px);font-size:clamp(17px,4.6vw,20px)}
+.zip-head{width:16px;height:16px}
+.zip-cell.hint-rethink::after{width:20px;height:20px;font-size:14px}
+.patch-badge{font-size:20px;width:32px;height:32px}
+.patch-badge.tall{width:28px;height:38px}.patch-badge.wide{width:38px;height:28px}.patch-badge.any{width:30px;height:30px}
+.patch-badge.any::before{width:40px;height:23px}.patch-badge.any::after{width:23px;height:40px}
+.play-guide{font-size:16px;line-height:1.8;padding:16px;margin-top:20px}
+.play-guide .play-guide-title{font-size:18px;line-height:1.6;margin-bottom:16px}
+.play-guide p{margin-top:12px}.play-legend{gap:16px 12px}
+.play-legend>span{font-size:15px;line-height:1.6;gap:10px;min-height:32px}
+.play-legend svg{width:30px;height:30px}
+.patch-icon{width:22px;height:22px}.patch-icon.tall{width:18px;height:28px}.patch-icon.wide{width:28px;height:18px}
+.patch-icon.any::before{width:28px;height:14px}.patch-icon.any::after{width:14px;height:28px}
+details{font-size:16px;line-height:1.9;margin-top:20px;padding-top:14px}
+summary{font-size:16px;line-height:1.6;min-height:44px;display:list-item;padding-block:8px}
+details p{margin:12px 0}
+footer{font-size:12px;line-height:1.8;letter-spacing:1px;margin-top:22px;color:#6c7664}
+.overlay{font-size:16px;line-height:1.9}.overlay small{font-size:14px}.spinner{width:26px;height:26px}
+dialog h2{font-size:26px;line-height:1.4}dialog p{font-size:16px;line-height:1.8}
+.dialog-actions button{font-size:16px;line-height:1.5;min-height:48px;padding:12px 8px}
+@media(max-width:360px){
+  .app{padding:12px 12px max(20px,env(safe-area-inset-bottom))}
+  .brand{font-size:22px}.brand small{font-size:12px;letter-spacing:.5px}.edition{font-size:12px;padding-left:8px}
+  .heading h1{font-size:28px}.serial{font-size:12px;letter-spacing:.5px}
+  .bar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end}
+  .select-wrap{flex-direction:column;align-items:flex-start;gap:4px}
+  select{width:100%;padding-right:18px}.time{padding-bottom:10px}
+  .play-guide{padding:14px}.play-legend{gap:14px 8px}.play-legend>span{gap:8px}
+}
+
+</style></head><body><main class="app"><header class="mast"><div class="brand">紙上小日子<small>A LITTLE TIME FOR YOURSELF</small></div><div class="edition">隨手一局<br>慢慢解，輕輕玩</div></header><nav class="tabs" role="tablist" aria-label="選擇遊戲"><button class="tab" role="tab" id="tab-sudoku" aria-selected="true" aria-controls="panel-sudoku">數獨</button><button class="tab" role="tab" id="tab-mine" tabindex="-1" aria-selected="false" aria-controls="panel-mine">踩地雷</button><button class="tab" role="tab" id="tab-zip" tabindex="-1" aria-selected="false" aria-controls="panel-zip">Zip</button><button class="tab" role="tab" id="tab-patches" tabindex="-1" aria-selected="false" aria-controls="panel-patches">Patches</button></nav>
+<section id="panel-sudoku" role="tabpanel" aria-labelledby="tab-sudoku"><div class="heading"><h1>數獨</h1><span class="serial">NO. 01 / SUDOKU</span></div><p class="subtitle">留一點空白，給專心的自己。</p><div class="bar"><label class="select-wrap">難度 <select id="s-level"><option value="0">第 0 級 · 入門</option><option value="1" selected>第 1 級 · 簡單</option><option value="2">第 2 級 · 中等</option><option value="3">第 3 級 · 困難</option></select></label><span class="time" id="s-time">◷ 00:00</span></div><div class="board-wrap"><div id="s-board" class="board sudoku" role="group" aria-label="數獨棋盤"></div><div class="overlay" id="loading"><div><div class="spinner"></div>正在為你出一道新題…<br><small>檢查唯一解，請稍候</small></div></div></div><div class="status" aria-live="polite"><span id="s-message">每行、每列、每宮，填入 1–9。</span><span id="s-count"></span></div><div class="tools"><button class="tool" id="undo"><b>↶</b>復原</button><button class="tool" id="erase"><b>⌫</b>清除</button><button class="tool" id="notes" aria-pressed="false"><b>✎</b>筆記</button><button class="tool active" id="conflict-toggle" aria-pressed="true"><b id="conflict-state">開</b>重複提示</button></div><div class="keypad" id="keypad"></div><button class="new" id="s-new">換一道新題 ↗</button><div class="play-guide"><p class="play-guide-title">每行、每列、每宮，填入 1–9。</p><div class="play-legend"><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h26v8H3z" fill="#d4e3cc" stroke="none"/><rect x="2" y="2" width="28" height="28" rx="2"/><path d="M11 2v28M21 2v28M2 11h28M2 21h28"/></svg>行內不重複</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3h8v26h-8z" fill="#d4e3cc" stroke="none"/><rect x="2" y="2" width="28" height="28" rx="2"/><path d="M11 2v28M21 2v28M2 11h28M2 21h28"/></svg>列內不重複</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="26" height="26" fill="#d4e3cc" stroke="none"/><rect x="2" y="2" width="28" height="28" rx="2"/><path d="M11 2v28M21 2v28M2 11h28M2 21h28"/></svg>宮內不重複</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="28" height="28" rx="2"/><g fill="currentColor" stroke="none" font-size="10" font-family="sans-serif" text-anchor="middle"><text x="8" y="12">1</text><text x="16" y="20">5</text><text x="24" y="28">9</text></g></svg>候選筆記</span></div><p>點選空格，再點數字；還不確定時，開啟「筆記」記下候選。</p><p>「重複提示」開啟時，紅格表示行、列或宮內有重複，不會直接揭露正確答案。</p></div><details><summary>操作與出題方式</summary><p>點選可填寫的格子，再點數字鍵。「筆記」可記下或移除候選數字；「清除」清空目前格子；「復原」撤回上一步。題目原有的數字不能修改。</p><p>「重複提示」預設開啟，可自行關閉；換題與切換遊戲時保留選擇，重新整理後恢復開啟。這項功能只檢查重複，不比對答案。電腦可用數字鍵輸入、方向鍵選格、Backspace／Delete 清除，N 切換筆記。</p><p>每題即時隨機產生並檢查唯一解。入門與簡單以單一候選解法篩選，中等允許隱藏單一候選；困難只保證唯一解，可能需要進一步推理。級別不代表嚴格的競賽評級。切換遊戲保留當局進度，重新整理後全部重來。</p></details></section>
+<section id="panel-mine" role="tabpanel" aria-labelledby="tab-mine" hidden><div class="heading"><h1>踩地雷</h1><span class="serial">NO. 02 / MINESWEEPER</span></div><p class="subtitle">細看每個線索，走出安全的小路。</p><div class="bar"><label class="select-wrap">難度 <select id="m-level"><option value="0">第 0 級 · 入門</option><option value="1" selected>第 1 級 · 簡單</option><option value="2">第 2 級 · 中等</option><option value="3">第 3 級 · 困難</option></select></label><span class="time" id="m-time">◷ 00:00</span></div><div id="m-board" class="board mine" role="group" aria-label="踩地雷棋盤"></div><div class="status" aria-live="polite"><span id="m-message">第一步放心點，周圍也安全。</span><span id="m-count"></span></div><div class="mine-mode"><button class="tool active" id="reveal-mode" aria-pressed="true">⌕ &nbsp;開格</button><button class="tool" id="flag-mode" aria-pressed="false">⚑ &nbsp;插旗</button></div><div class="mine-info"><span id="m-remaining"></span><span id="m-size"></span></div><button class="new" id="m-new">重新開一局 ↗</button><div class="play-guide"><p class="play-guide-title">看數字找安全格，避開地雷。</p><div class="play-legend"><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="28" height="28" rx="2"/><path d="M11 2v28M21 2v28M2 11h28M2 21h28"/><g fill="currentColor" stroke="none"><circle cx="6.5" cy="6.5" r="1.4"/><circle cx="25.5" cy="25.5" r="1.4"/><text x="16" y="20" font-size="12" text-anchor="middle" font-family="sans-serif">2</text></g></svg>數字看八格</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 29V3l17 4-17 7M4 29h12"/><path d="M9 4l14 3-14 5z" fill="#d4e3cc" stroke="none"/></svg>插旗標記</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2l12 5v9c0 7-12 14-12 14S4 23 4 16V7z" fill="#e1eadc"/><path d="M10 16l4 4 8-9" stroke-width="2"/></svg>首點安全</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="26" height="26" rx="3" fill="#e1eadc"/><path d="M8 16l5 6L25 9" stroke-width="2"/></svg>開完安全格</span></div><p>數字代表周圍八格的地雷數；開出所有無雷格即可過關，不必插滿旗子。</p><p>切換「開格／插旗」後再點格子。第一次開格及周圍八格安全，後續仍可能需要猜測。</p></div><details><summary>操作與出題方式</summary><p>在「開格」模式點選格子，顯示數字或展開空白區；在「插旗」模式點一下放旗，再點一下取消。已插旗的格子不會被直接開啟，請先移除旗子。電腦也可用滑鼠右鍵插旗。</p><p>踩到地雷即結束；開出所有無雷格即過關，插旗不影響勝利判斷。踩到地雷後可按「看看棋盤」查看線索，再決定是否重開。</p><p>每局隨機布雷，第一次開格及周圍八格安全；後續不保證完全不必猜測。難度以棋盤大小與地雷數調整，最大維持 9 × 9。切換遊戲保留當局進度，重新整理後全部重來。</p></details></section><section id="panel-zip" role="tabpanel" aria-labelledby="tab-zip" hidden>
+  <div class="heading"><h1>Zip 連線</h1><span class="serial">NO. 03 / ZIP</span></div>
+  <p class="subtitle">一筆連起數字，走遍每一格。</p>
+  <div class="bar"><label class="select-wrap">難度 <select id="z-level"><option value="0">第 0 級 · 入門 4×4</option><option value="1" selected>第 1 級 · 簡單 5×5</option><option value="2">第 2 級 · 中等 6×6</option><option value="3">第 3 級 · 困難 6×6</option><option value="4">第 4 級 · 挑戰</option></select></label><span class="time" id="z-time">◷ 00:00</span></div>
+  <div class="zip-wrap">
+    <div class="zip-surface" id="z-surface">
+      <div id="z-board" class="board zip-board" role="group" aria-label="Zip 連線棋盤"></div>
+      <svg id="z-lines" class="zip-lines" viewBox="0 0 500 500" aria-hidden="true"><polyline id="z-line" points=""/></svg>
+    </div>
+    <div class="overlay" id="z-loading" hidden><div><div class="spinner"></div>正在鋪一條新的小路…<br><small>請稍候</small></div></div>
+  </div>
+  <div class="status" aria-live="polite"><span id="z-message">從 1 開始，依序連起所有數字。</span><span id="z-count"></span></div>
+  <div class="zip-tools"><button class="tool" id="z-undo"><b>↶</b>退一步</button><button class="tool" id="z-clear"><b>⌫</b>清空路線</button><button class="tool" id="z-hint" disabled><b>✧</b>提示</button></div>
+  
+  <button class="new" id="z-new">換一條新路 ↗</button>
+  <div class="play-guide"><p class="play-guide-title">按順序連起數字，走遍每一格。</p><div class="play-legend"><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16h18"/><g fill="#f5f2eb"><circle cx="5" cy="16" r="5"/><circle cx="16" cy="16" r="5"/><circle cx="27" cy="16" r="5"/></g><g fill="currentColor" stroke="none" font-size="8" text-anchor="middle" font-family="sans-serif"><text x="5" y="19">1</text><text x="16" y="19">2</text><text x="27" y="19">3</text></g></svg>依序連數字</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="28" height="28" rx="2"/><path d="M11 2v28M21 2v28M2 11h28M2 21h28"/><path d="M6.5 6.5h19v9.5h-19v9.5h19" stroke="#35634d" stroke-width="3"/></svg>填滿每格</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2v28M2 16h28M11 7l5-5 5 5M11 25l5 5 5-5M7 11l-5 5 5 5M25 11l5 5-5 5"/></svg>上下左右</span><span><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 26V7h11v19h11V7" stroke="#35634d" stroke-width="3"/><g fill="#f5f2eb"><circle cx="5" cy="26" r="3"/><circle cx="27" cy="7" r="3"/></g></svg>每格走一次</span></div><p>從 1 出發，依序經過所有數字，走滿每一格後才抵達最大的數字。不能斜走或交叉。</p><p>拖曳或逐格點選都能連線；拖回或點選已走過的格子，會退回到該處。</p></div><details><summary>操作與出題方式</summary><p>按住 1 開始拖曳，放開後可從路線末端繼續；也可以逐格點選。「退一步」撤回一格；「清空路線」會先確認，保留題目與計時。電腦可用方向鍵延伸路線、Backspace／Delete 退一步。</p><p>卡住時可按「提示」：路線正確時，以綠框標示下一格；已偏離解答時，以琥珀色框與問號標出第一個需要重想的位置。提示不會自動連線或刪除路線；移動、退回或清空路線後標示消失。</p><p>第 4 級「挑戰」維持 6×6，從多道題目中挑選需要更多分支探索的題目；不是單純放大棋盤。每局即時隨機生成並驗證唯一解，沒有固定題庫。難度以棋盤大小與數字線索數量調整，並非正式解題技巧評級。第一版沒有牆壁；切換遊戲保留當局進度，換題或重新整理會清除該局進度。</p><p>第 4 級「挑戰」維持 6×6，從多條路線中挑選需要更多前後規劃的題目。篩選可能稍久，未完成時可按換題重試；仍保留提示、退一步與清空。</p></details>
+</section>
+<section id="panel-patches" role="tabpanel" aria-labelledby="tab-patches" hidden>
+  <div class="heading"><h1>拼區</h1><span class="serial">NO. 04 / PATCHES</span></div>
+  <p class="subtitle">把每一塊，放在剛剛好的地方。</p>
+  <div class="bar"><label class="select-wrap">難度 <select id="p-level"><option value="0">第 0 級 · 入門 4×4</option><option value="1" selected>第 1 級 · 簡單 5×5</option><option value="2">第 2 級 · 中等 6×6</option><option value="3">第 3 級 · 困難 6×6</option><option value="4">第 4 級 · 挑戰</option></select></label><span class="time" id="p-time">◷ 00:00</span></div>
+  <div class="patch-wrap">
+    <div class="patch-surface" id="p-surface">
+      <div id="p-board" class="board patch-board" role="group" aria-label="Patches 拼區棋盤"></div>
+      <svg id="p-regions" class="patch-regions" viewBox="0 0 500 500" aria-hidden="true"></svg>
+    </div>
+    <div class="overlay" id="p-loading" hidden><div><div class="spinner"></div>正在拼一張新的小風景…<br><small>請稍候</small></div></div>
+  </div>
+  <div class="status patch-status" aria-live="polite"><span id="p-message">拖曳或點選兩個對角，劃出一個區域。</span><span id="p-count"></span></div>
+  <div class="patch-tools"><button class="tool" id="p-undo" disabled><b>↶</b>復原</button><button class="tool" id="p-delete" disabled><b>⌫</b>刪除</button><button class="tool" id="p-hint" disabled><b>✧</b>提示</button><button class="tool" id="p-clear" disabled><b>↺</b>清空</button></div>
+  <button class="new" id="p-new">換一張新拼圖 ↗</button>
+  <div class="play-guide">
+    <p class="play-guide-title">完成每個形狀，填滿所有格子。</p>
+    <div class="play-legend">
+      <span><i class="patch-icon square" aria-hidden="true"></i>正方形</span>
+      <span><i class="patch-icon tall" aria-hidden="true"></i>直向長方形</span>
+      <span><i class="patch-icon wide" aria-hidden="true"></i>橫向長方形</span>
+      <span><i class="patch-icon any" aria-hidden="true"></i>以上任一種</span>
+    </div>
+    <p>有數字時，區域格數必須等於該數字；沒有數字時，請推理它的面積。</p>
+    <p>每區恰好包含一個線索，不能重疊，也不能留下空格。</p>
+  </div>
+  <details><summary>操作與出題方式</summary><p>從一個角拖曳到對角，放開就能劃出區域。也可以先點起點，再點對角。選取時會顯示寬、高與格數；每個區域都必須是正方形或長方形，不能畫 L 形。</p><p>點選已畫好的區域，再按「刪除」即可移除。「復原」可撤回新增、刪除或清空；「清空」保留題目與計時。電腦可用方向鍵移動選取位置、Enter／空白鍵選角、Delete 刪除選取區域、Esc 取消選角。</p><p>主動按「提示」才會比對解答：琥珀色框標示需要重想的區域；綠色虛線預覽一個可完成的區域。提示不會代畫或刪除區域。</p><p>第 4 級「挑戰」維持 6×6，從多道題目中挑選需要更多分支探索的題目；不是單純放大棋盤。每局即時隨機生成並驗證唯一解，沒有固定題庫。較高級別會隱藏部分面積線索；難度不代表正式技巧評級。切換遊戲保留當局進度，重新整理後全部重來。</p></details>
+</section>
+<footer>隨機出題 · 無需登入 · 重開即新局</footer></main>
+<dialog id="dialog"><h2 id="dialog-title"></h2><p id="dialog-text"></p><div class="dialog-actions"><button id="dialog-cancel">繼續這局</button><button id="dialog-ok" class="primary">確定</button></div></dialog>
+<script id="core">
+const GameCore=(()=>{
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function candidates(b,i){if(b[i])return [];let r=Math.floor(i/9),c=i%9,used=new Set;for(let k=0;k<9;k++){used.add(b[r*9+k]);used.add(b[k*9+c]);used.add(b[(Math.floor(r/3)*3+Math.floor(k/3))*9+Math.floor(c/3)*3+k%3])}return [1,2,3,4,5,6,7,8,9].filter(n=>!used.has(n))}
+function countSolutions(board,limit=2){let b=board.slice(),nodes=0;function walk(){if(++nodes>100000)return limit;let best=-1,opts;for(let i=0;i<81;i++)if(!b[i]){let a=candidates(b,i);if(!a.length)return 0;if(!opts||a.length<opts.length){best=i;opts=a;if(a.length===1)break}}if(best<0)return 1;let count=0;for(let v of opts){b[best]=v;count+=walk();b[best]=0;if(count>=limit)return limit}return count}return walk()}
+function logical(board,hidden){let b=board.slice();for(let step=0;step<81;step++){if(b.every(Boolean))return true;let opts=b.map((v,i)=>v?[]:candidates(b,i)),i=opts.findIndex(a=>a.length===1);if(i>=0){b[i]=opts[i][0];continue}let found=false;if(hidden){for(let u=0;u<27&&!found;u++){let ids=Array.from({length:9},(_,k)=>u<9?u*9+k:u<18?k*9+u-9:(Math.floor((u-18)/3)*3+Math.floor(k/3))*9+(u-18)%3*3+k%3);for(let n=1;n<=9;n++){let spots=ids.filter(j=>opts[j].includes(n));if(spots.length===1){b[spots[0]]=n;found=true;break}}}}if(!found)return false}return b.every(Boolean)}
+function generate(level){const started=Date.now(),target=[46,38,32,28][level];let best;for(let attempt=0;attempt<5;attempt++){let bands=shuffle([0,1,2]),stacks=shuffle([0,1,2]),rows=bands.flatMap(g=>shuffle([0,1,2]).map(k=>g*3+k)),cols=stacks.flatMap(g=>shuffle([0,1,2]).map(k=>g*3+k)),digits=shuffle([1,2,3,4,5,6,7,8,9]);let solution=rows.flatMap(r=>cols.map(c=>digits[(r*3+Math.floor(r/3)+c)%9]));if(Math.random()<.5)solution=solution.map((_,i)=>solution[(i%9)*9+Math.floor(i/9)]);let puzzle=solution.slice(),clues=81;for(let i of shuffle(Array.from({length:81},(_,k)=>k))){if(clues<=target)break;let v=puzzle[i];puzzle[i]=0;if(countSolutions(puzzle)!==1||(level<3&&!logical(puzzle,level===2)))puzzle[i]=v;else clues--;}if(!best||clues<best.clues)best={puzzle,solution,clues};if(clues<=target||Date.now()-started>1800)break}return best}
+function neighbors(i,size){let a=[],r=Math.floor(i/size),c=i%size;for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++)if(dr||dc){let y=r+dr,x=c+dc;if(y>=0&&y<size&&x>=0&&x<size)a.push(y*size+x)}return a}
+function placeMines(size,total,first){let safe=new Set([first,...neighbors(first,size)]),ids=shuffle(Array.from({length:size*size},(_,i)=>i).filter(i=>!safe.has(i))),cells=Array.from({length:size*size},()=>({mine:false,open:false,flag:false,n:0}));ids.slice(0,total).forEach(i=>cells[i].mine=true);cells.forEach((c,i)=>c.n=neighbors(i,size).filter(j=>cells[j].mine).length);return cells}
+function flood(cells,size,start){let queue=[start];while(queue.length){let i=queue.pop(),c=cells[i];if(c.open||c.flag||c.mine)continue;c.open=true;if(c.n===0)queue.push(...neighbors(i,size).filter(j=>!cells[j].open&&!cells[j].flag))}}
+return {candidates,countSolutions,logical,generate,neighbors,placeMines,flood};})();
+// Pure rules and bounded, on-device generation. No stored puzzles.
+const ZipCore = (() => {
+  const sizes = [4, 5, 6, 6, 6], targets = [8, 9, 10, 7, 7];
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function neighbors(i, size) {
+    const r = Math.floor(i / size), c = i % size, a = [];
+    if (r) a.push(i - size); if (c + 1 < size) a.push(i + 1);
+    if (r + 1 < size) a.push(i + size); if (c) a.push(i - 1);
+    return a;
+  }
+  function adjacent(a, b, size) {
+    return Number.isInteger(a) && Number.isInteger(b) && a >= 0 && b >= 0 && a < size * size && b < size * size && Math.abs(Math.floor(a / size) - Math.floor(b / size)) + Math.abs(a % size - b % size) === 1;
+  }
+  function randomPath(size) {
+    let path = Array.from({length: size * size}, (_, i) => Math.floor(i / size) * size + (Math.floor(i / size) % 2 ? size - 1 - i % size : i % size));
+    // Backbite moves preserve a Hamiltonian path while changing both ends and bends.
+    for (let k = 0; k < size * size * 60; k++) {
+      if (Math.random() < .5) path.reverse();
+      const choices = neighbors(path[0], size).filter(v => v !== path[1]);
+      if (!choices.length) continue;
+      const at = path.indexOf(choices[Math.floor(Math.random() * choices.length)]);
+      path = path.slice(0, at).reverse().concat(path.slice(at));
+    }
+    return path;
+  }
+  function labelsFor(path, marks) {
+    const labels = Array(path.length).fill(0);
+    marks.forEach((step, n) => { labels[path[step]] = n + 1; });
+    return labels;
+  }
+  function countSolutions(size, labels, options = {}) {
+    const total = size * size, max = Math.max(...labels), start = labels.indexOf(1), end = labels.indexOf(max);
+    if (labels.length !== total || start < 0 || max < 2 || labels.filter(Boolean).length !== max || new Set(labels.filter(Boolean)).size !== max || labels.some(v => !Number.isInteger(v) || v < 0 || v > max)) return {count: 0, complete: true, nodes: 0};
+    const graph = Array.from({length: total}, (_, i) => neighbors(i, size));
+    const positions = Array.from({length: max + 1}, (_, i) => labels.indexOf(i));
+    const used = new Uint8Array(total), seen = new Uint32Array(total), queue = new Uint8Array(total);
+    const budget = options.nodes ?? 80000, deadline = options.deadline ?? Infinity;
+    let count = 0, nodes = 0, limited = false, stamp = 0, branches = 0, maxBranchDepth = 0;
+    const distance = (a,b) => Math.abs(Math.floor(a / size) - Math.floor(b / size)) + Math.abs(a % size - b % size);
+    const tailDistance = Array(max + 2).fill(0);
+    for (let k = max - 1; k >= 1; k--) tailDistance[k] = tailDistance[k + 1] + distance(positions[k], positions[k + 1]);
+    function walk(at, next, depth, branchDepth = 0) {
+      if (count >= 2 || limited) return;
+      if (++nodes > budget || (nodes % 256 === 0 && Date.now() > deadline)) { limited = true; return; }
+      if (at === end) { if (depth === total && next === max + 1) count++; return; }
+      const remaining = total - depth;
+      if (next > max || distance(at, positions[next]) + tailDistance[next] > remaining || (remaining - distance(at, end)) % 2) return;
+      // Every unvisited internal cell still needs two available incident edges.
+      let first = -1, forced = -1;
+      for (let i = 0; i < total; i++) if (!used[i]) {
+        if (first < 0) first = i;
+        let degree = 0, touchesHead = false;
+        for (const j of graph[i]) { if (!used[j]) degree++; else if (j === at) { degree++; touchesHead = true; } }
+        if (degree < (i === end ? 1 : 2)) return;
+        if (i !== end && degree === 2 && touchesHead) { if (forced >= 0) return; forced = i; }
+      }
+      // The remaining cells must stay connected without using the head twice.
+      stamp++; let head = 0, tail = 1; queue[0] = first; seen[first] = stamp;
+      while (head < tail) for (const j of graph[queue[head++]]) if (!used[j] && seen[j] !== stamp) { seen[j] = stamp; queue[tail++] = j; }
+      if (tail !== remaining) return;
+      const available = graph[at].filter(to => !used[to] && (forced < 0 || to === forced) && (!labels[to] || labels[to] === next) && (to !== end || depth === total - 1));
+      if (available.length > 1) branches++;
+      const nextDepth = branchDepth + (available.length > 1 ? 1 : 0); maxBranchDepth = Math.max(maxBranchDepth, nextDepth);
+      for (const to of available) {
+        if (used[to] || (forced >= 0 && to !== forced) || (labels[to] && labels[to] !== next) || (to === end && depth !== total - 1)) continue;
+        used[to] = 1; walk(to, next + (labels[to] === next ? 1 : 0), depth + 1, nextDepth); used[to] = 0;
+        if (count >= 2 || limited) return;
+      }
+    }
+    used[start] = 1; walk(start, 2, 1);
+    return {count, complete: !limited, nodes, branches, maxBranchDepth};
+  }
+  function generateBase(level, options = {}) {
+    const size = sizes[level]; if (!size) throw Error('Invalid Zip level');
+    const solution = randomPath(size), total = size * size, target = targets[level];
+    let marks = Array.from({length: total}, (_, i) => i);
+    const deadline = options.deadline ?? Date.now() + 850;
+    for (const step of shuffle(marks.slice(1, -1))) {
+      if (marks.length <= target || Date.now() >= deadline) break;
+      const trial = marks.filter(v => v !== step), result = countSolutions(size, labelsFor(solution, trial), {nodes: 60000, deadline});
+      // A timeout is never accepted as evidence of uniqueness.
+      if (result.complete && result.count === 1) marks = trial;
+    }
+    return {size, labels: labelsFor(solution, marks), solution};
+  }
+  // Search effort is a repeatable ranking proxy, not a certified human difficulty grade.
+  function assess(puzzle, options = {}) {
+    const result = countSolutions(puzzle.size, puzzle.labels, options);
+    return {...result, score: result.complete && result.count === 1 ? result.branches + result.maxBranchDepth * 20 : -1};
+  }
+  function isChallenge(result) {
+    return result.complete && result.count === 1 && result.branches >= 150 && result.maxBranchDepth >= 10;
+  }
+  function generate(level) {
+    if (!Number.isInteger(level) || level < 0 || level >= sizes.length) throw Error('Invalid Zip level');
+    if (level !== 4) return generateBase(level);
+    const deadline = Date.now() + 1200; let best = null, bestAssessment = null, sampled = 0;
+    for (; sampled < 64 && Date.now() < deadline; sampled++) {
+      const candidate = generateBase(3, {deadline: Math.min(deadline, Date.now() + 100)});
+      const result = assess(candidate, {deadline, nodes: 80000});
+      if (isChallenge(result) && (!bestAssessment || result.score > bestAssessment.score)) { best = candidate; bestAssessment = result; }
+    }
+    if (!best) throw Error('Challenge selection incomplete; retry');
+    return {...best, difficulty: {level:4, method:'search-effort-v1', score:bestAssessment.score, branches:bestAssessment.branches, maxBranchDepth:bestAssessment.maxBranchDepth, sampled}};
+  }
+  function advance(puzzle, route, cell) {
+    const {size, labels} = puzzle, total = size * size, max = Math.max(...labels);
+    if (!Number.isInteger(cell) || cell < 0 || cell >= total) return {route, error: '請在棋盤內連線。'};
+    if (!route.length) return labels[cell] === 1 ? {route: [cell]} : {route, error: '請從數字 1 開始。'};
+    const previous = route.indexOf(cell);
+    if (previous >= 0) return {route: route.slice(0, previous + 1)};
+    if (!adjacent(route[route.length - 1], cell, size)) return {route, error: '只能上下左右，逐格相連。'};
+    const next = 1 + route.reduce((n, i) => n + (labels[i] ? 1 : 0), 0);
+    if (labels[cell] && labels[cell] !== next) return {route, error: `下一個要連的是 ${next}。`};
+    if (labels[cell] === max && route.length !== total - 1) return {route, error: '先走完其他空格，再抵達終點。'};
+    const result = [...route, cell];
+    return {route: result, done: result.length === total && labels[cell] === max};
+  }
+  // Only a player-requested hint compares the current route with the unique solution.
+  // It returns a cell to highlight; it never changes the player's route.
+  function getHint(puzzle, route) {
+    const solution = puzzle.solution;
+    if (!solution || !solution.length) return null;
+    for (let step = 0; step < route.length; step++) {
+      if (route[step] !== solution[step]) return {type:'rethink', cell:route[step], step};
+    }
+    return route.length < solution.length ? {type:'next', cell:solution[route.length], step:route.length} : null;
+  }
+  return {sizes, targets, neighbors, adjacent, randomPath, countSolutions, generate, advance, getHint, assess, isChallenge};
+})();
+
+// Rectangular tiling rules, exact-cover solver and random on-device generation.
+const PatchesCore = (() => {
+  const sizes = [4,5,6,6,6];
+  function shuffle(a) { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a; }
+  function shapeOf(rect) { return rect.w===rect.h?'square':rect.w>rect.h?'wide':'tall'; }
+  function sameRect(a,b) { return !!a&&!!b&&a.r===b.r&&a.c===b.c&&a.w===b.w&&a.h===b.h; }
+  function contains(rect,cell,size) { const r=Math.floor(cell/size),c=cell%size;return r>=rect.r&&r<rect.r+rect.h&&c>=rect.c&&c<rect.c+rect.w; }
+  function overlaps(a,b) { return a.r<b.r+b.h&&b.r<a.r+a.h&&a.c<b.c+b.w&&b.c<a.c+a.w; }
+  function inBoard(rect,size) { return ['r','c','w','h'].every(k=>Number.isInteger(rect[k]))&&rect.r>=0&&rect.c>=0&&rect.w>0&&rect.h>0&&rect.r+rect.h<=size&&rect.c+rect.w<=size; }
+  function rectFromCells(a,b,size) { return {r:Math.min(Math.floor(a/size),Math.floor(b/size)),c:Math.min(a%size,b%size),w:Math.abs(a%size-b%size)+1,h:Math.abs(Math.floor(a/size)-Math.floor(b/size))+1}; }
+  function cellsOf(rect,size) { const a=[];for(let r=rect.r;r<rect.r+rect.h;r++)for(let c=rect.c;c<rect.c+rect.w;c++)a.push(r*size+c);return a; }
+  function candidates(size,clues,index) {
+    const clue=clues[index],row=Math.floor(clue.cell/size),col=clue.cell%size,result=[];
+    for(let r=0;r<=row;r++)for(let c=0;c<=col;c++)for(let h=row-r+1;r+h<=size;h++)for(let w=col-c+1;c+w<=size;w++) {
+      const rect={r,c,w,h};
+      if((clue.area!==null&&clue.area!==w*h)||(clue.shape!=='any'&&clue.shape!==shapeOf(rect))||clues.some((other,i)=>i!==index&&contains(rect,other.cell,size)))continue;
+      result.push(rect);
+    }
+    return result;
+  }
+  function solve(puzzle,options={}) {
+    const {size,clues}=puzzle,total=size*size;
+    if(!Number.isInteger(size)||size<1||size>8||!Array.isArray(clues)||!clues.length||new Set(clues.map(c=>c.cell)).size!==clues.length||clues.some(c=>!Number.isInteger(c.cell)||c.cell<0||c.cell>=total||!['square','wide','tall','any'].includes(c.shape)||(c.area!==null&&(!Number.isInteger(c.area)||c.area<1||c.area>total))))return {count:0,complete:true,nodes:0,solution:null};
+    const byCell=Array.from({length:total},()=>[]),byClue=clues.map((_,i)=>candidates(size,clues,i).map(rect=>{
+      const cells=cellsOf(rect,size),mask=cells.reduce((m,k)=>m|(1n<<BigInt(k)),0n),entry={...rect,clue:i,mask};cells.forEach(k=>byCell[k].push(entry));return entry;
+    }));
+    const bits=Array.from({length:total},(_,i)=>1n<<BigInt(i)),all=(1n<<BigInt(total))-1n,taken=new Uint8Array(clues.length),chosen=Array(clues.length);
+    const budget=options.nodes??80000,deadline=options.deadline??Infinity;
+    let count=0,nodes=0,limited=false,solution=null,branches=0,maxBranchDepth=0;
+    function walk(used,depth,branchDepth=0) {
+      if(count>=2||limited)return;
+      if(++nodes>budget||(nodes%128===0&&Date.now()>deadline)){limited=true;return;}
+      if(depth===clues.length){if(used===all){count++;if(!solution)solution=chosen.map(x=>({r:x.r,c:x.c,w:x.w,h:x.h}));}return;}
+      let best=null;
+      for(let i=0;i<clues.length;i++)if(!taken[i]){
+        const opts=byClue[i].filter(x=>(x.mask&used)===0n);if(!opts.length)return;if(!best||opts.length<best.length)best=opts;
+      }
+      // Cell constraints also catch uncovered holes and can force a rectangle.
+      if(best.length>1)for(let k=0;k<total;k++)if((used&bits[k])===0n){
+        const opts=byCell[k].filter(x=>!taken[x.clue]&&(x.mask&used)===0n);if(!opts.length)return;if(opts.length<best.length)best=opts;if(best.length===1)break;
+      }
+      if(best.length>1)branches++;const nextDepth=branchDepth+(best.length>1?1:0);maxBranchDepth=Math.max(maxBranchDepth,nextDepth);
+      for(const entry of best){taken[entry.clue]=1;chosen[entry.clue]=entry;walk(used|entry.mask,depth+1,nextDepth);taken[entry.clue]=0;if(count>=2||limited)return;}
+    }
+    walk(0n,0);return {count,complete:!limited,nodes,solution,branches,maxBranchDepth};
+  }
+  function randomTiling(size,target,deadline) {
+    const total=size*size,used=new Uint8Array(total),rects=[],maxArea=size===4?8:12;let nodes=0;
+    function fill(filled) {
+      if(++nodes>6000||(nodes%128===0&&Date.now()>deadline))return false;
+      if(filled===total)return rects.length===target;
+      const left=total-filled,regions=target-rects.length;if(regions<=0||left<regions*2||left>regions*maxArea)return false;
+      const first=used.findIndex(v=>!v),r=Math.floor(first/size),c=first%size,choices=[];
+      for(let h=1;r+h<=size;h++)for(let w=1;c+w<=size;w++){
+        if(w*h<2||w*h>maxArea)continue;const rect={r,c,w,h};if(cellsOf(rect,size).some(i=>used[i]))continue;
+        choices.push(rect);
+      }
+      shuffle(choices);
+      for(const rect of choices){const ids=cellsOf(rect,size);ids.forEach(i=>used[i]=1);rects.push(rect);if(fill(filled+ids.length))return true;rects.pop();ids.forEach(i=>used[i]=0);}
+      return false;
+    }
+    return fill(0)?rects.map(r=>({...r})):null;
+  }
+  function generateBase(level, options = {}) {
+    const size=sizes[level];if(!size)throw Error('Invalid Patches level');
+    const deadline=options.deadline??Date.now()+1200,baseTarget=[5,7,9,9][level];
+    for(let attempt=0;attempt<100&&Date.now()<deadline;attempt++){
+      const target=baseTarget+(Math.floor(Math.random()*3)-1),solution=randomTiling(size,target,deadline);if(!solution)continue;
+      for(let anchors=0;anchors<4&&Date.now()<deadline;anchors++){
+        let clues=solution.map(rect=>{const ids=cellsOf(rect,size);return {cell:ids[Math.floor(Math.random()*ids.length)],area:rect.w*rect.h,shape:shapeOf(rect)};});
+        const base=solve({size,clues},{deadline,nodes:30000});if(!base.complete||base.count!==1)continue;
+        // Remove information only when an exhaustive search still proves uniqueness.
+        const hideTarget=level<2?0:Math.max(1,Math.floor(clues.length*(level===2?.35:.6)));
+        let hidden=0;
+        for(const i of shuffle(clues.map((_,i)=>i))){
+          if(hidden>=hideTarget||Date.now()>=deadline)break;
+          const trial=clues.map((c,k)=>k===i?{...c,area:null}:c),check=solve({size,clues:trial},{deadline,nodes:30000});
+          if(check.complete&&check.count===1){clues=trial;hidden++;}
+        }
+        if(level>=2&&hidden===0)continue;
+        const removeShapeTarget=Math.floor(clues.length*[.45,.7,.35,.5][level]);let removed=0;
+        for(const i of shuffle(clues.map((_,i)=>i))){
+          if(removed>=removeShapeTarget||Date.now()>=deadline)break;
+          // Keep shape-only clues meaningful; fully unspecified anchors are postponed.
+          if(clues[i].area===null)continue;
+          const trial=clues.map((c,k)=>k===i?{...c,shape:'any'}:c),check=solve({size,clues:trial},{deadline,nodes:30000});
+          if(check.complete&&check.count===1){clues=trial;removed++;}
+        }
+        return {size,clues,solution};
+      }
+    }
+    throw Error('Generation budget exceeded; retry with a new random tiling');
+  }
+  function assess(puzzle, options = {}) {
+    const result = solve(puzzle, options);
+    return {...result, score: result.complete && result.count === 1 ? result.branches + result.maxBranchDepth * 8 : -1};
+  }
+  function isChallenge(result) {
+    return result.complete && result.count === 1 && result.branches >= 4 && result.maxBranchDepth >= 3;
+  }
+  function generate(level) {
+    if (!Number.isInteger(level) || level < 0 || level >= sizes.length) throw Error('Invalid Patches level');
+    if (level !== 4) return generateBase(level);
+    const deadline = Date.now() + 1200; let best = null, bestAssessment = null, sampled = 0;
+    for (; sampled < 64 && Date.now() < deadline; sampled++) {
+      let candidate;
+      try { candidate = generateBase(3, {deadline: Math.min(deadline, Date.now() + 100)}); } catch { continue; }
+      const result = assess(candidate, {deadline, nodes:80000});
+      if (isChallenge(result) && (!bestAssessment || result.score > bestAssessment.score)) { best = candidate; bestAssessment = result; }
+    }
+    if (!best) throw Error('Challenge selection incomplete; retry');
+    return {...best, difficulty: {level:4, method:'search-effort-v1', score:bestAssessment.score, branches:bestAssessment.branches, maxBranchDepth:bestAssessment.maxBranchDepth, sampled}};
+  }
+  function validate(puzzle,rect,placed=[]) {
+    if(!rect||!inBoard(rect,puzzle.size))return {error:'請在棋盤內選取完整的長方形。'};
+    const ids=puzzle.clues.map((c,i)=>contains(rect,c.cell,puzzle.size)?i:-1).filter(i=>i>=0);
+    if(ids.length!==1)return {error:ids.length?'每個區域只能包含一個線索。':'區域內需要包含一個線索。'};
+    const clue=ids[0],info=puzzle.clues[clue];
+    if(info.area!==null&&rect.w*rect.h!==info.area)return {error:`這個線索需要 ${info.area} 格，目前選了 ${rect.w*rect.h} 格。`};
+    if(info.shape!=='any'&&shapeOf(rect)!==info.shape)return {error:`這個線索需要${{square:'正方形',wide:'橫向長方形',tall:'直向長方形'}[info.shape]}。`};
+    if(placed.some(x=>overlaps(rect,x)))return {error:'區域不能重疊，請先刪除原有區域。'};
+    return {clue};
+  }
+  function isComplete(puzzle,placed) {
+    if(placed.length!==puzzle.clues.length)return false;
+    const accepted=[];for(const rect of placed){const check=validate(puzzle,rect,accepted);if(check.error||check.clue!==rect.clue)return false;accepted.push(rect);}
+    return accepted.reduce((n,r)=>n+r.w*r.h,0)===puzzle.size*puzzle.size;
+  }
+  function getHint(puzzle,placed) {
+    for(const rect of placed)if(!sameRect(rect,puzzle.solution[rect.clue]))return {type:'rethink',clue:rect.clue,rect:{r:rect.r,c:rect.c,w:rect.w,h:rect.h}};
+    const missing=puzzle.solution.map((rect,clue)=>({rect,clue})).filter(x=>!placed.some(p=>p.clue===x.clue)).sort((a,b)=>a.rect.w*a.rect.h-b.rect.w*b.rect.h);
+    return missing.length?{type:'region',clue:missing[0].clue,rect:{...missing[0].rect}}:null;
+  }
+  return {sizes,shapeOf,sameRect,contains,overlaps,inBoard,rectFromCells,cellsOf,candidates,solve,randomTiling,generate,validate,isComplete,getHint,assess,isChallenge};
+})();
+
+</script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);let active='sudoku',worker=null,generation=0,pendingLevel=null,showConflicts=true;let s={level:1,ready:false,selected:-1,notesMode:false,history:[],done:false,elapsed:0,started:false};let m={level:1,size:9,total:10,cells:[],placed:false,done:false,mode:'reveal',elapsed:0,started:false};
+function time(n){return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
+let last=performance.now();setInterval(()=>{let now=performance.now(),delta=(now-last)/1000;last=now;if(document.hidden)return;let state=active==='sudoku'?s:active==='mine'?m:active==='zip'?z:p;if(state.started&&!state.done&&(active==='mine'||state.ready)){state.elapsed+=delta;$(active==='sudoku'?'s-time':active==='mine'?'m-time':active==='zip'?'z-time':'p-time').textContent='◷ '+time(Math.floor(state.elapsed))}},250);document.addEventListener('visibilitychange',()=>last=performance.now());
+function showDialog(title,text,ok,label='重新開始',cancel=true){$('dialog-title').textContent=title;$('dialog-text').textContent=text;$('dialog-ok').textContent=label;$('dialog-cancel').hidden=!cancel;$('dialog-cancel').textContent='繼續這局';$('dialog-ok').onclick=()=>{$('dialog').close();ok()};$('dialog-cancel').onclick=()=>{$('dialog').close();if(pendingLevel){pendingLevel();pendingLevel=null}};$('dialog').oncancel=()=>{if(pendingLevel){pendingLevel();pendingLevel=null}};$('dialog').showModal()}
+function changeGame(game){stopZipDrag();stopPatchDrag();active=game;for(let g of ['sudoku','mine','zip','patches']){$('panel-'+g).hidden=g!==game;$('tab-'+g).setAttribute('aria-selected',String(g===game));$('tab-'+g).tabIndex=g===game?0:-1}if(game==='mine'&&!m.cells.length)newMine(1);if(game==='zip'&&!z.ready&&!zipWorker)newZip(z.level);if(game==='patches'){if(!p.ready&&!patchWorker)newPatches(p.level);else if(p.ready)renderPatches();}last=performance.now()}
+for(const g of ['sudoku','mine','zip','patches'])$('tab-'+g).onclick=()=>changeGame(g);document.querySelector('.tabs').addEventListener('keydown',e=>{const games=['sudoku','mine','zip','patches'];let i=games.indexOf(active);if(e.key==='ArrowLeft')i=(i+3)%4;else if(e.key==='ArrowRight')i=(i+1)%4;else if(e.key==='Home')i=0;else if(e.key==='End')i=3;else return;e.preventDefault();changeGame(games[i]);$('tab-'+active).focus()});
+function requestNew(kind,level){let state=kind==='s'?s:kind==='m'?m:kind==='z'?z:p,run=()=>{pendingLevel=null;kind==='s'?newSudoku(level):kind==='m'?newMine(level):kind==='z'?newZip(level):newPatches(level)};if(state.started&&!state.done){pendingLevel=()=>$(kind+'-level').value=state.level;showDialog('換一局，換個心情？','這局的進度會清除，並以所選難度隨機開始新的一局。',run)}else run()}
+$('s-level').onchange=()=>requestNew('s',+$('s-level').value);$('m-level').onchange=()=>requestNew('m',+$('m-level').value);$('s-new').onclick=()=>requestNew('s',s.level);$('m-new').onclick=()=>requestNew('m',m.level);
+function newSudoku(level){generation++;let token=generation;if(worker){worker.terminate();worker=null}s={level,ready:false,selected:-1,notesMode:false,history:[],done:false,elapsed:0,started:false};$('s-level').value=level;$('s-time').textContent='◷ 00:00';$('loading').hidden=false;$('s-message').textContent='正在檢查這一題的唯一解…';$('s-count').textContent='';$('s-board').setAttribute('aria-busy','true');$('s-board').replaceChildren();for(let i=0;i<81;i++){let b=document.createElement('button');b.className='cell';b.disabled=true;$('s-board').append(b)}updateTools();function finish(data){if(token!==generation)return;Object.assign(s,{...data,values:data.puzzle.slice(),notes:Array.from({length:81},()=>[]),ready:true});$('loading').hidden=true;$('s-board').removeAttribute('aria-busy');s.selected=data.puzzle.findIndex(v=>!v);renderSudoku()}function fallback(){if(token!==generation)return;setTimeout(()=>{try{finish(GameCore.generate(level))}catch(e){$('loading').hidden=true;$('s-message').textContent='這次出題未完成，請按「換一道新題」重試。'}},30)}try{let code= $('core').textContent+'\nonmessage=e=>postMessage(GameCore.generate(e.data));';let url=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));worker=new Worker(url);URL.revokeObjectURL(url);worker.onmessage=e=>{worker.terminate();worker=null;finish(e.data)};worker.onerror=()=>{worker.terminate();worker=null;fallback()};worker.postMessage(level)}catch(e){fallback()}}
+function conflicts(i){let v=s.values[i];if(!v)return false;let r=Math.floor(i/9),c=i%9;return s.values.some((n,j)=>j!==i&&n===v&&(Math.floor(j/9)===r||j%9===c||Math.floor(j/27)===Math.floor(i/27)&&Math.floor(j%9/3)===Math.floor(c/3)))}
+function renderSudoku(){if(!s.ready)return;let selected=s.selected,value=s.values[selected],r=Math.floor(selected/9),c=selected%9;Array.from($('s-board').children).forEach((b,i)=>{b.disabled=s.done;b.className='cell';if(!s.puzzle[i])b.classList.add('entered');if(selected>=0&&(Math.floor(i/9)===r||i%9===c||Math.floor(i/27)===Math.floor(selected/27)&&Math.floor(i%9/3)===Math.floor(c/3)))b.classList.add('peer');if(value&&s.values[i]===value)b.classList.add('same');if(showConflicts&&conflicts(i))b.classList.add('conflict');if(i===selected)b.classList.add('selected');b.replaceChildren();if(s.values[i])b.textContent=s.values[i];else if(s.notes[i].length){let notes=document.createElement('span');notes.className='notes';for(let n=1;n<=9;n++){let el=document.createElement('span');el.textContent=s.notes[i].includes(n)?n:'';notes.append(el)}b.append(notes)}b.setAttribute('aria-label',`第${Math.floor(i/9)+1}行第${i%9+1}列，${s.values[i]||'空白'}${s.puzzle[i]?'，題目固定數字':''}${s.notes[i].length?'，筆記'+s.notes[i].join('、'):''}`);b.setAttribute('aria-pressed',String(i===selected));b.onclick=()=>{s.selected=i;renderSudoku()}});let remaining=s.values.filter(v=>!v).length;$('s-count').textContent=`尚餘 ${remaining} 格`;$('s-message').textContent=s.done?'完成了，給自己一個小小掌聲。':showConflicts&&s.values.some((_,i)=>conflicts(i))?'有重複的數字，再看看紅色格子。':s.notesMode?'筆記模式：記下你考慮的數字。':'每行、每列、每宮，填入 1–9。';document.querySelectorAll('.key').forEach((b,i)=>{b.disabled=s.done;b.querySelector('small').textContent=`餘 ${Math.max(0,9-s.values.filter(v=>v===i+1).length)}`});updateTools()}
+function updateTools(){let disabled=!s.ready||s.done;$('undo').disabled=disabled||!s.history.length;$('erase').disabled=disabled||s.selected<0||!!s.puzzle?.[s.selected];$('notes').disabled=disabled;$('notes').classList.toggle('active',s.notesMode);$('notes').setAttribute('aria-pressed',String(s.notesMode));document.querySelectorAll('.key').forEach(b=>b.disabled=disabled)}
+function enter(n){let i=s.selected;if(!s.ready||s.done||i<0||s.puzzle[i])return;if(!s.notesMode&&s.values[i]===n)return;s.history.push({values:s.values.slice(),notes:s.notes.map(a=>a.slice())});s.started=true;if(s.notesMode&&n){s.values[i]=0;let a=s.notes[i];s.notes[i]=a.includes(n)?a.filter(v=>v!==n):[...a,n].sort()}else{s.values[i]=n;s.notes[i]=[];if(n)for(let j=0;j<81;j++)if(Math.floor(j/9)===Math.floor(i/9)||j%9===i%9||Math.floor(j/27)===Math.floor(i/27)&&Math.floor(j%9/3)===Math.floor(i%9/3))s.notes[j]=s.notes[j].filter(v=>v!==n)}if(s.values.every(Boolean)&&!s.values.some((_,j)=>conflicts(j)))s.done=true;renderSudoku();if(s.done)showDialog('這一題，解開了。',`你用了 ${time(Math.floor(s.elapsed))}，完成第 ${s.level} 級數獨。要再來一道嗎？`,()=>newSudoku(s.level),'再來一道',false)}
+$('conflict-toggle').onclick=()=>{showConflicts=!showConflicts;$('conflict-toggle').classList.toggle('active',showConflicts);$('conflict-toggle').setAttribute('aria-pressed',String(showConflicts));$('conflict-state').textContent=showConflicts?'開':'關';renderSudoku()};
+for(let n=1;n<=9;n++){let b=document.createElement('button');b.className='key';b.innerHTML=n+'<small></small>';b.setAttribute('aria-label','輸入 '+n);b.onclick=()=>enter(n);$('keypad').append(b)}$('erase').onclick=()=>enter(0);$('notes').onclick=()=>{s.notesMode=!s.notesMode;renderSudoku()};$('undo').onclick=()=>{if(!s.history.length||s.done)return;let prev=s.history.pop();s.values=prev.values;s.notes=prev.notes;renderSudoku()};document.addEventListener('keydown',e=>{if(active!=='sudoku'||$('dialog').open||e.target.tagName==='SELECT')return;if(/^[1-9]$/.test(e.key)){e.preventDefault();enter(+e.key)}else if(e.key==='Backspace'||e.key==='Delete'){e.preventDefault();enter(0)}else if(e.key.toLowerCase()==='n'&&s.ready){s.notesMode=!s.notesMode;renderSudoku()}else if(e.key.startsWith('Arrow')&&s.ready){e.preventDefault();let i=Math.max(0,s.selected),r=Math.floor(i/9),c=i%9;if(e.key==='ArrowLeft')c=Math.max(0,c-1);if(e.key==='ArrowRight')c=Math.min(8,c+1);if(e.key==='ArrowUp')r=Math.max(0,r-1);if(e.key==='ArrowDown')r=Math.min(8,r+1);s.selected=r*9+c;renderSudoku();$('s-board').children[s.selected].focus()}});
+function newMine(level){let [size,total]=[[7,6],[9,10],[9,14],[9,18]][level];m={level,size,total,cells:Array.from({length:size*size},()=>({mine:false,open:false,flag:false,n:0})),placed:false,done:false,mode:'reveal',elapsed:0,started:false};$('m-level').value=level;$('m-time').textContent='◷ 00:00';$('m-board').style.gridTemplateColumns=`repeat(${size},1fr)`;$('m-board').replaceChildren();m.cells.forEach((_,i)=>{let b=document.createElement('button');b.className='cell';b.onclick=()=>mineAction(i);b.oncontextmenu=e=>{e.preventDefault();mineAction(i,true)};$('m-board').append(b)});renderMine()}
+function setMode(mode){m.mode=mode;renderMine()}$('reveal-mode').onclick=()=>setMode('reveal');$('flag-mode').onclick=()=>setMode('flag');
+function mineAction(i,right=false){if(m.done)return;let c=m.cells[i];if(c.open)return;if(right||m.mode==='flag'){c.flag=!c.flag;renderMine();return}if(c.flag)return;if(!m.placed){let flags=m.cells.map(c=>c.flag);m.cells=GameCore.placeMines(m.size,m.total,i);m.cells.forEach((c,j)=>c.flag=flags[j]);m.placed=true;m.started=true;c=m.cells[i]}if(c.mine){c.open=true;m.done=true;m.exploded=i;renderMine();showDialog('差一點，就找到路了。','踩到地雷了。棋盤已揭開，可以關閉視窗看看線索，或再試一局。',()=>newMine(m.level),'再試一局');$('dialog-cancel').textContent='看看棋盤';return}GameCore.flood(m.cells,m.size,i);m.won=m.cells.filter(c=>c.open).length===m.size*m.size-m.total;if(m.won)m.done=true;renderMine();if(m.won){showDialog('安全抵達，漂亮！',`你用了 ${time(Math.floor(m.elapsed))}，找出了所有安全格。`,()=>newMine(m.level),'再玩一局',false)}}
+function renderMine(){if(!m.cells.length)return;let flags=m.cells.filter(c=>c.flag).length,opened=m.cells.filter(c=>c.open&&!c.mine).length;Array.from($('m-board').children).forEach((b,i)=>{let c=m.cells[i];b.className='cell';b.textContent='';b.removeAttribute('data-n');b.disabled=m.done;if(c.open||m.done&&c.mine){b.classList.add('revealed');if(c.mine)b.textContent='✹';else if(c.n){b.textContent=c.n;b.dataset.n=c.n}}else if(c.flag){b.textContent='⚑';b.classList.add('flag')}if(m.done&&!m.won&&c.flag&&!c.mine)b.textContent='×';if(i===m.exploded)b.classList.add('exploded');b.setAttribute('aria-label',`第${Math.floor(i/m.size)+1}行第${i%m.size+1}列，${c.open?c.mine?'地雷':c.n?c.n+'顆相鄰地雷':'空白':m.done&&c.mine?'地雷':c.flag?'已插旗':'未開啟'}`)});$('m-message').textContent=m.done?m.won?'所有安全格都找到了！':'踩到地雷了，下一局再接再厲。':!m.placed?'第一步放心點，周圍也安全。':m.mode==='flag'?'插旗模式：點一下標記，再點取消。':'看數字，找出下一個安全格。';$('m-count').textContent=`已開 ${opened} 格`;$('m-remaining').textContent=`⚑ 待標記 ${m.total-flags} / ${m.total} 顆雷`;$('m-size').textContent=`${m.size} × ${m.size} 棋盤`;for(let mode of ['reveal','flag']){$(mode+'-mode').classList.toggle('active',m.mode===mode);$(mode+'-mode').setAttribute('aria-pressed',String(m.mode===mode))}}
+// Zip uses its own worker so switching games never cancels a pending Sudoku.
+let z = {level:1, size:5, ready:false, route:[], done:false, elapsed:0, started:false, focus:0, hint:null};
+let zipWorker = null, zipGeneration = 0, zipWatchdog = null, zipPointer = null;
+function stopZipDrag() {
+  const pointer = zipPointer; zipPointer = null;
+  if (pointer && $('z-board').hasPointerCapture(pointer.id)) $('z-board').releasePointerCapture(pointer.id);
+}
+function newZip(level) {
+  stopZipDrag(); const token = ++zipGeneration;
+  if (zipWorker) { zipWorker.terminate(); zipWorker = null; }
+  clearTimeout(zipWatchdog);
+  z = {level, size:ZipCore.sizes[level], ready:false, route:[], done:false, elapsed:0, started:false, focus:0, hint:null};
+  $('z-level').value = level; $('z-time').textContent = '◷ 00:00';
+  $('z-loading').hidden = false; $('z-board').setAttribute('aria-busy','true');
+  $('z-board').replaceChildren(); $('z-line').setAttribute('points','');
+  $('z-message').textContent = level === 4 ? '正在挑選需要多步規劃的新路線…' : '正在鋪一條新的小路…'; $('z-count').textContent = '';
+  $('z-undo').disabled = true; $('z-clear').disabled = true; $('z-hint').disabled = true;
+  function fail() {
+    if (token !== zipGeneration) return;
+    clearTimeout(zipWatchdog); if (zipWorker) { zipWorker.terminate(); zipWorker = null; }
+    $('z-loading').hidden = true; $('z-board').removeAttribute('aria-busy');
+    $('z-message').textContent = level === 4 ? '這次挑戰題篩選未完成，請按「換一條新路」重試。' : '出題未完成，請按「換一條新路」重試。';
+  }
+  function finish(data) {
+    if (token !== zipGeneration) return;
+    clearTimeout(zipWatchdog);
+    Object.assign(z, data, {ready:true, focus:data.labels.indexOf(1)});
+    $('z-board').style.setProperty('--zip-size',z.size);
+    $('z-lines').setAttribute('viewBox',`0 0 ${z.size*100} ${z.size*100}`);
+    for (let i = 0; i < z.size*z.size; i++) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'zip-cell'; b.dataset.zipIndex = i;
+      // Real pointer clicks are handled on pointerdown; detail=0 supports keyboards and assistive technology.
+      b.onclick = e => { if (e.detail === 0) zipAction(i); };
+      b.onfocus = () => { z.focus = i; };
+      $('z-board').append(b);
+    }
+    $('z-loading').hidden = true; $('z-board').removeAttribute('aria-busy'); renderZip();
+  }
+  function fallback() {
+    if (token !== zipGeneration) return;
+    if (zipWorker) { zipWorker.terminate(); zipWorker = null; }
+    clearTimeout(zipWatchdog);
+    setTimeout(() => { if (token !== zipGeneration) return; try { finish(ZipCore.generate(level)); } catch { fail(); } }, 30);
+  }
+  try {
+    const source = $('core').textContent + '\nonmessage=e=>{try{postMessage({data:ZipCore.generate(e.data)})}catch{postMessage({error:true})}};';
+    const url = URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+    try { zipWorker = new Worker(url); } finally { URL.revokeObjectURL(url); }
+    zipWorker.onmessage = e => {
+      if (token !== zipGeneration || !zipWorker) return;
+      zipWorker.terminate(); zipWorker = null;
+      if (e.data.error) fail(); else finish(e.data.data);
+    };
+    zipWorker.onerror = () => { if (token === zipGeneration && zipWorker) fallback(); };
+    zipWatchdog = setTimeout(fail, 8000); zipWorker.postMessage(level);
+  } catch { fallback(); }
+}
+function renderZip(message = '') {
+  if (!z.ready) return;
+  const max = Math.max(...z.labels), next = 1 + z.route.filter(i => z.labels[i]).length, head = z.route[z.route.length-1];
+  Array.from($('z-board').children).forEach((b,i) => {
+    const number = z.labels[i], at = z.route.indexOf(i);
+    b.className = 'zip-cell'; b.disabled = z.done; b.tabIndex = i === (head ?? z.focus) ? 0 : -1;
+    if ((i % z.size) === z.size-1) b.style.borderRight = '0';
+    if (i >= z.size*(z.size-1)) b.style.borderBottom = '0';
+    if (at >= 0) b.classList.add('visited'); if (i === head) b.classList.add('head');
+    if (number === next) b.classList.add('next'); if (number === max) b.classList.add('finish');
+    if (z.hint?.cell === i) b.classList.add('hint-'+z.hint.type);
+    b.replaceChildren();
+    if (number) { const badge = document.createElement('span'); badge.className = 'zip-marker'; badge.textContent = number; b.append(badge); }
+    else if (i === head) { const dot = document.createElement('span'); dot.className = 'zip-head'; b.append(dot); }
+    b.setAttribute('aria-label',`第${Math.floor(i/z.size)+1}行第${i%z.size+1}列，${number?'數字 '+number+(number===max?'，終點':''):'空格'}${at>=0?'，路線第 '+(at+1)+' 格':''}${i===head?'，目前位置':''}${z.hint?.cell===i?z.hint.type==='rethink'?'，提示：從這格開始需要重想':'，提示：下一格':''}`);
+  });
+  $('z-line').setAttribute('points',z.route.map(i => `${i%z.size*100+50},${Math.floor(i/z.size)*100+50}`).join(' '));
+  $('z-message').textContent = message || z.hint?.message || (z.done?'每一格，都連起來了。':!z.route.length?'從 1 開始，依序連起所有數字。':`下一站 ${next} / ${max} · 從末端繼續連線`);
+  $('z-count').textContent = `${z.route.length} / ${z.size*z.size} 格`;
+  $('z-undo').disabled = z.done || !z.route.length; $('z-clear').disabled = z.done || !z.route.length; $('z-hint').disabled = z.done;
+}
+function zipAction(i, quiet = false) {
+  if (active !== 'zip' || !z.ready || z.done || $('dialog').open) return false;
+  if (z.route[z.route.length-1] === i) return true;
+  const result = ZipCore.advance(z, z.route, i);
+  if (result.error) { if (!quiet) renderZip(result.error); return false; }
+  z.route = result.route; z.hint = null; z.focus = i; z.started = true; z.done = !!result.done; renderZip();
+  if (z.done) {
+    stopZipDrag();
+    showDialog('這條小路，走完了。',`你用了 ${time(Math.floor(z.elapsed))}，完成第 ${z.level} 級 Zip。每一格都剛剛好。`,()=>newZip(z.level),'再走一條',false);
+  }
+  return true;
+}
+function zipUndo() {
+  if (!z.ready || z.done || !z.route.length) return;
+  stopZipDrag(); z.hint = null; z.route.pop(); z.focus = z.route[z.route.length-1] ?? z.labels.indexOf(1); renderZip();
+}
+function zipHint() {
+  if (active !== 'zip' || !z.ready || z.done || $('dialog').open) return;
+  stopZipDrag();
+  const hint = ZipCore.getHint(z, z.route);
+  if (!hint) return;
+  const row = Math.floor(hint.cell / z.size) + 1, col = hint.cell % z.size + 1;
+  hint.message = hint.type === 'rethink' ? '標示格開始偏離路線，請退回前一格。' : `下一步：第 ${row} 行第 ${col} 列，請自行連線。`;
+  z.hint = hint; renderZip();
+}
+$('z-hint').onclick = zipHint;
+$('z-undo').onclick = zipUndo;
+$('z-clear').onclick = () => {
+  if (!z.ready || z.done || !z.route.length) return;
+  stopZipDrag(); pendingLevel = null;
+  showDialog('重新規劃這條路？','只清空路線，保留這道題目與累積時間。',()=>{z.route=[];z.hint=null;z.focus=z.labels.indexOf(1);renderZip();},'清空路線');
+};
+$('z-level').onchange = () => requestNew('z',+$('z-level').value);
+$('z-new').onclick = () => requestNew('z',z.level);
+const zipBoard = $('z-board');
+zipBoard.addEventListener('pointerdown', e => {
+  if (e.button !== 0 || e.isPrimary === false || zipPointer || !z.ready || z.done || $('dialog').open) return;
+  const b = e.target.closest('[data-zip-index]'); if (!b) return;
+  e.preventDefault(); const i = +b.dataset.zipIndex;
+  if (!zipAction(i) || z.done) return;
+  b.focus({preventScroll:true}); zipPointer = {id:e.pointerId,x:e.clientX,y:e.clientY}; zipBoard.setPointerCapture(e.pointerId);
+});
+zipBoard.addEventListener('pointermove', e => {
+  if (!zipPointer || e.pointerId !== zipPointer.id) return;
+  e.preventDefault(); const rect = zipBoard.getBoundingClientRect();
+  const left = rect.left+zipBoard.clientLeft, top = rect.top+zipBoard.clientTop;
+  const width = zipBoard.clientWidth, height = zipBoard.clientHeight;
+  const samples = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+  if (!samples.length) samples.push(e);
+  for (const point of samples) {
+    if (!zipPointer) break;
+    const from = {x:zipPointer.x,y:zipPointer.y};
+    const steps = Math.min(200,Math.max(1,Math.ceil(Math.hypot(point.clientX-from.x,point.clientY-from.y)/(width/z.size/4))));
+    for (let k=1;k<=steps && zipPointer;k++) {
+      const x=from.x+(point.clientX-from.x)*k/steps-left, y=from.y+(point.clientY-from.y)*k/steps-top;
+      if (x<0 || y<0 || x>=width || y>=height) continue;
+      const i=Math.floor(y/height*z.size)*z.size+Math.floor(x/width*z.size);
+      zipAction(i,true);
+    }
+    if (zipPointer) { zipPointer.x=point.clientX; zipPointer.y=point.clientY; }
+  }
+});
+for (const name of ['pointerup','pointercancel','lostpointercapture']) zipBoard.addEventListener(name,e=>{if(zipPointer && e.pointerId===zipPointer.id)stopZipDrag();});
+zipBoard.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopZipDrag();});
+document.addEventListener('keydown', e => {
+  if (active!=='zip' || !z.ready || z.done || $('dialog').open || e.target.tagName==='SELECT' || !zipBoard.contains(e.target)) return;
+  if (e.key==='Backspace' || e.key==='Delete') { e.preventDefault(); zipUndo(); return; }
+  const directions = {ArrowUp:-z.size,ArrowDown:z.size,ArrowLeft:-1,ArrowRight:1};
+  if (!(e.key in directions)) return;
+  e.preventDefault(); const from=z.route[z.route.length-1]??z.focus, to=from+directions[e.key];
+  if (!ZipCore.adjacent(from,to,z.size)) return;
+  if (z.route.length) zipAction(to); else { z.focus=to; renderZip(); }
+  if (!z.done) zipBoard.children[z.route[z.route.length-1]??z.focus].focus({preventScroll:true});
+});
+
+const patchPalette=[['#35634d','#e1eadc'],['#28747c','#dcecef'],['#94651e','#f2e8ce'],['#3d6e9b','#e0e9f1'],['#9b5b59','#f1dfdc'],['#80658e','#eae1ee'],['#816349','#ece2d6'],['#687b3a','#e9ecd8'],['#576b76','#e1e8eb'],['#8e5f7a','#eedfe8']];
+const patchShapeNames={square:'正方形',wide:'橫向長方形',tall:'直向長方形',any:'正方形或長方形'};
+let p={level:1,size:5,ready:false,placed:[],history:[],selected:null,anchor:null,focus:0,draft:null,hint:null,started:false,done:false,elapsed:0};
+let patchWorker=null,patchGeneration=0,patchWatchdog=null,patchPointer=null;
+function stopPatchDrag(cancel=true){
+  const pointer=patchPointer;patchPointer=null;
+  if(pointer&&$('p-board').hasPointerCapture(pointer.id))$('p-board').releasePointerCapture(pointer.id);
+  if(cancel){p.anchor=null;p.draft=null;}
+}
+function newPatches(level){
+  stopPatchDrag();const token=++patchGeneration;
+  if(patchWorker){patchWorker.terminate();patchWorker=null;}clearTimeout(patchWatchdog);
+  p={level,size:PatchesCore.sizes[level],ready:false,placed:[],history:[],selected:null,anchor:null,focus:0,draft:null,hint:null,started:false,done:false,elapsed:0};
+  $('p-level').value=level;$('p-time').textContent='◷ 00:00';$('p-loading').hidden=false;$('p-board').setAttribute('aria-busy','true');$('p-board').replaceChildren();$('p-regions').replaceChildren();
+  $('p-message').textContent=level===4?'正在挑選需要連續排除的拼圖…':'正在拼一張新的小風景…';$('p-count').textContent='';
+  for(const id of ['p-undo','p-delete','p-hint','p-clear'])$(id).disabled=true;
+  function fail(){
+    if(token!==patchGeneration)return;clearTimeout(patchWatchdog);if(patchWorker){patchWorker.terminate();patchWorker=null;}
+    $('p-loading').hidden=true;$('p-board').removeAttribute('aria-busy');$('p-message').textContent=level===4?'這次挑戰題篩選未完成，請按「換一張新拼圖」重試。':'出題未完成，請按「換一張新拼圖」重試。';
+  }
+  function finish(data){
+    if(token!==patchGeneration)return;clearTimeout(patchWatchdog);Object.assign(p,data,{ready:true});
+    $('p-board').style.setProperty('--patch-size',p.size);$('p-regions').setAttribute('viewBox',`0 0 ${p.size*100} ${p.size*100}`);
+    for(let i=0;i<p.size*p.size;i++){
+      const b=document.createElement('button');b.type='button';b.className='patch-cell';b.dataset.patchIndex=i;
+      b.onclick=e=>{if(e.detail===0)patchTap(i);};b.onfocus=()=>{p.focus=i;};$('p-board').append(b);
+    }
+    $('p-loading').hidden=true;$('p-board').removeAttribute('aria-busy');renderPatches();
+  }
+  function fallback(){
+    if(token!==patchGeneration)return;if(patchWorker){patchWorker.terminate();patchWorker=null;}clearTimeout(patchWatchdog);
+    setTimeout(()=>{if(token!==patchGeneration)return;try{finish(PatchesCore.generate(level));}catch{fail();}},30);
+  }
+  try{
+    const source=$('core').textContent+'\nonmessage=e=>{try{postMessage({data:PatchesCore.generate(e.data)})}catch{postMessage({error:true})}};';
+    const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));try{patchWorker=new Worker(url);}finally{URL.revokeObjectURL(url);}
+    patchWorker.onmessage=e=>{if(token!==patchGeneration||!patchWorker)return;patchWorker.terminate();patchWorker=null;if(e.data.error)fail();else finish(e.data.data);};
+    patchWorker.onerror=()=>{if(token===patchGeneration&&patchWorker)fallback();};patchWatchdog=setTimeout(fail,8000);patchWorker.postMessage(level);
+  }catch{fallback();}
+}
+function patchColor(clue){return patchPalette[clue%patchPalette.length];}
+function patchFrame(rect,color,fill,width=2,dash=''){
+  const el=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  for(const [key,value] of Object.entries({x:rect.c*100+3,y:rect.r*100+3,width:rect.w*100-6,height:rect.h*100-6,rx:4,fill,stroke:color,'stroke-width':width,'vector-effect':'non-scaling-stroke'}))el.setAttribute(key,String(value));
+  if(dash)el.setAttribute('stroke-dasharray',dash);$('p-regions').append(el);return el;
+}
+function renderPatches(message=''){
+  if(!p.ready)return;
+  const surface=$('p-regions');surface.replaceChildren();
+  for(const rect of p.placed){const color=patchColor(rect.clue);const frame=patchFrame(rect,color[0],color[1]);frame.setAttribute('fill-opacity','.64');if(rect.clue===p.selected)patchFrame(rect,'#293b34','none',3);}
+  if(p.draft){const check=PatchesCore.validate(p,p.draft,p.placed);patchFrame(p.draft,check.error?'#a66b32':'#35634d',check.error?'#f5e4cc88':'#dcebd688',2,'5 4');}
+  if(p.hint){const frame=patchFrame(p.hint.rect,p.hint.type==='rethink'?'#a66b32':'#35634d',p.hint.type==='rethink'?'#f5e4cc55':'#dcebd655',3,p.hint.type==='region'?'7 5':'');frame.setAttribute('data-patch-hint',p.hint.type);}
+  Array.from($('p-board').children).forEach((b,i)=>{
+    const clue=p.clues.findIndex(x=>x.cell===i),region=p.placed.find(x=>PatchesCore.contains(x,i,p.size));
+    b.className='patch-cell';b.disabled=p.done;b.tabIndex=i===p.focus?0:-1;
+    if(i%p.size===p.size-1)b.style.borderRight='0';if(i>=p.size*(p.size-1))b.style.borderBottom='0';
+    if(i===p.anchor)b.classList.add('corner');
+    if(p.hint&&PatchesCore.contains(p.hint.rect,i,p.size))b.classList.add('patch-hint-'+p.hint.type);
+    b.replaceChildren();
+    if(clue>=0){
+      const info=p.clues[clue],badge=document.createElement('span');badge.className='patch-badge '+info.shape;badge.style.setProperty('--patch-color',patchColor(clue)[0]);
+      badge.dataset.clueIndex=clue;badge.dataset.shape=info.shape;badge.dataset.area=info.area===null?'':info.area;
+      if(info.area!==null){const number=document.createElement('span');number.textContent=info.area;badge.append(number);}b.append(badge);
+    }
+    const info=clue>=0?p.clues[clue]:null;
+    b.setAttribute('aria-label',`第${Math.floor(i/p.size)+1}行第${i%p.size+1}列，${info?`${patchShapeNames[info.shape]}線索，${info.area===null?'面積待推理':info.area+' 格'}`:'空格'}${region?'，已劃分區域 '+(region.clue+1):''}${i===p.anchor?'，選角起點':''}${p.hint&&PatchesCore.contains(p.hint.rect,i,p.size)?p.hint.type==='rethink'?'，提示：需要重想':'，提示：建議區域':''}`);
+    b.setAttribute('aria-pressed',String(!!region&&region.clue===p.selected));
+  });
+  const area=p.placed.reduce((n,r)=>n+r.w*r.h,0);
+  const draftText=p.draft?`寬 ${p.draft.w} × 高 ${p.draft.h}＝${p.draft.w*p.draft.h} 格`:'';
+  $('p-message').textContent=message||draftText||p.hint?.message||(p.done?'每一塊，都找到自己的位置了。':p.anchor!==null?'已選起點，請點另一個對角。':p.selected!==null?'已選區域，可按「刪除」重新劃分。':'拖曳或點選兩個對角，劃出一個區域。');
+  $('p-count').textContent=`${area} / ${p.size*p.size} 格`;
+  $('p-undo').disabled=p.done||!p.history.length;$('p-delete').disabled=p.done||p.selected===null;$('p-hint').disabled=p.done;$('p-clear').disabled=p.done||(!p.placed.length&&p.anchor===null);
+}
+function patchSnapshot(){p.history.push(p.placed.map(x=>({...x})));}
+function patchCommit(rect){
+  if(active!=='patches'||!p.ready||p.done||$('dialog').open)return false;
+  const check=PatchesCore.validate(p,rect,p.placed);p.anchor=null;p.draft=null;
+  if(check.error){renderPatches(check.error);return false;}
+  patchSnapshot();p.placed.push({...rect,clue:check.clue});p.selected=null;p.hint=null;p.started=true;p.done=PatchesCore.isComplete(p,p.placed);renderPatches();
+  if(p.done){stopPatchDrag();showDialog('每一塊，都剛剛好。',`你用了 ${time(Math.floor(p.elapsed))}，完成第 ${p.level} 級 Patches。再拼一張新的小風景吧。`,()=>newPatches(p.level),'再拼一張',false);}
+  return true;
+}
+function patchTap(i){
+  if(active!=='patches'||!p.ready||p.done||$('dialog').open)return;
+  p.focus=i;
+  if(p.anchor!==null){patchCommit(PatchesCore.rectFromCells(p.anchor,i,p.size));return;}
+  const region=p.placed.find(x=>PatchesCore.contains(x,i,p.size));
+  if(region){p.selected=region.clue;p.draft=null;renderPatches();return;}
+  p.selected=null;p.anchor=i;p.started=true;renderPatches();
+}
+function patchUndo(){
+  if(!p.ready||p.done||!p.history.length)return;stopPatchDrag();p.placed=p.history.pop();p.selected=null;p.hint=null;renderPatches();
+}
+function patchDelete(){
+  if(!p.ready||p.done||p.selected===null)return;stopPatchDrag();patchSnapshot();p.placed=p.placed.filter(x=>x.clue!==p.selected);p.selected=null;p.hint=null;renderPatches();
+}
+function patchHint(){
+  if(active!=='patches'||!p.ready||p.done||$('dialog').open)return;stopPatchDrag();
+  const hint=PatchesCore.getHint(p,p.placed);if(!hint)return;
+  hint.message=hint.type==='rethink'?'標示區域需要重想，選取後可刪除。':'綠色虛線是建議區域，請自行劃出。';p.hint=hint;p.selected=null;renderPatches();
+}
+$('p-undo').onclick=patchUndo;$('p-delete').onclick=patchDelete;$('p-hint').onclick=patchHint;
+$('p-clear').onclick=()=>{
+  if(!p.ready||p.done)return;stopPatchDrag();
+  if(!p.placed.length){p.selected=null;p.hint=null;renderPatches();return;}
+  pendingLevel=null;showDialog('重新拼這張風景？','只清空已劃分的區域，保留題目與累積時間。',()=>{patchSnapshot();p.placed=[];p.selected=null;p.hint=null;renderPatches();},'清空區域');
+};
+$('p-level').onchange=()=>requestNew('p',+$('p-level').value);$('p-new').onclick=()=>requestNew('p',p.level);
+const patchBoard=$('p-board');
+function patchPointCell(x,y){const r=patchBoard.getBoundingClientRect(),left=r.left+patchBoard.clientLeft,top=r.top+patchBoard.clientTop,w=patchBoard.clientWidth,h=patchBoard.clientHeight;if(x<left||y<top||x>=left+w||y>=top+h)return null;return Math.floor((y-top)/h*p.size)*p.size+Math.floor((x-left)/w*p.size);}
+patchBoard.addEventListener('pointerdown',e=>{
+  if(e.button!==0||e.isPrimary===false||patchPointer||!p.ready||p.done||$('dialog').open)return;
+  const b=e.target.closest('[data-patch-index]');if(!b)return;e.preventDefault();const i=+b.dataset.patchIndex;p.focus=i;b.focus({preventScroll:true});
+  if(p.anchor===null&&p.placed.some(x=>PatchesCore.contains(x,i,p.size))){patchTap(i);return;}
+  patchPointer={id:e.pointerId,start:i,last:i,priorAnchor:p.anchor,moved:false};p.anchor=p.anchor??i;p.selected=null;p.draft=PatchesCore.rectFromCells(p.anchor,i,p.size);p.started=true;patchBoard.setPointerCapture(e.pointerId);renderPatches();
+});
+patchBoard.addEventListener('pointermove',e=>{
+  if(!patchPointer||e.pointerId!==patchPointer.id)return;e.preventDefault();const i=patchPointCell(e.clientX,e.clientY);if(i===null)return;
+  if(i!==patchPointer.start)patchPointer.moved=true;if(i===patchPointer.last)return;patchPointer.last=i;p.draft=PatchesCore.rectFromCells(p.anchor,i,p.size);renderPatches();
+});
+patchBoard.addEventListener('pointerup',e=>{
+  if(!patchPointer||e.pointerId!==patchPointer.id)return;
+  const pointer=patchPointer,i=patchPointCell(e.clientX,e.clientY),anchor=p.anchor;stopPatchDrag(false);
+  if(i===null){p.anchor=null;p.draft=null;renderPatches('已取消選取，請重新選擇對角。');return;}
+  if(pointer.moved||i!==pointer.start||pointer.priorAnchor!==null){patchCommit(PatchesCore.rectFromCells(anchor,i,p.size));}
+  else{p.draft=null;renderPatches();}
+});
+for(const name of ['pointercancel','lostpointercapture'])patchBoard.addEventListener(name,e=>{if(patchPointer&&e.pointerId===patchPointer.id){stopPatchDrag();renderPatches();}});
+patchBoard.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopPatchDrag();if(p.ready)renderPatches();}});
+document.addEventListener('keydown',e=>{
+  if(active!=='patches'||!p.ready||p.done||$('dialog').open||!patchBoard.contains(e.target))return;
+  if(e.key==='Escape'){e.preventDefault();stopPatchDrag();p.selected=null;renderPatches();return;}
+  if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();patchDelete();return;}
+  const moves={ArrowUp:-p.size,ArrowDown:p.size,ArrowLeft:-1,ArrowRight:1};if(!(e.key in moves))return;
+  e.preventDefault();const to=p.focus+moves[e.key];if(to<0||to>=p.size*p.size||Math.abs(Math.floor(to/p.size)-Math.floor(p.focus/p.size))+Math.abs(to%p.size-p.focus%p.size)!==1)return;
+  p.focus=to;if(p.anchor!==null)p.draft=PatchesCore.rectFromCells(p.anchor,to,p.size);renderPatches();patchBoard.children[to].focus({preventScroll:true});
+});
+
+newSudoku(1);
+</script></body></html>
